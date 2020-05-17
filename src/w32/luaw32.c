@@ -4,7 +4,7 @@
 * COPYRIGHT
 *  (C) 2004-2007 Daniel Quintela.  All rights reserved.
 *  http://www.soongsoft.com mailto:dq@soongsoft.com
-*  (C) 2013 http://quik2dde.ru
+*  (C) 2013-2019 https://quik2dde.ru/viewtopic.php?id=78
 * LICENSE
 *  Permission is hereby granted, free of charge, to any person obtaining
 *  a copy of this software and associated documentation files (the
@@ -39,6 +39,7 @@
 * 2006-08-25 08:20:00  Denis Povshedny   QueryServiceConfig & StartService added.
 * 2007-04-15 10:31:00  Daniel Quintela   CreateMutex parameter list fixed.
 * 2013-10-27 00:00:15  www.quik2dde.ru   Linking with qlia.dll
+* 2019-07-16 00:00:15  www.quik2dde.ru   Fix file path buffer size
 *
 * NOTES
 *
@@ -50,7 +51,7 @@
 //#include <compat-5.1.h>
 
 #ifndef WIN32
-#error "Only for Win32!"
+#error "Only for Windows!"
 #endif
 
 #include <windows.h>
@@ -716,7 +717,7 @@ static int global_CreateProcess(lua_State *L) {
 
 static int global_GetTempFileName(lua_State *L) {
     UINT rc;
-    char tfn[MAX_PATH];
+    char tfn[MAX_PATH*4];
     const char *path = luaL_checkstring( L, 1);
     const char *pfx = luaL_checkstring( L, 2);
     UINT unique = ( UINT) luaL_checknumber( L, 3);
@@ -748,9 +749,9 @@ static int global_GetTempFileName(lua_State *L) {
 
 static int global_GetTempPath(lua_State *L) {
     DWORD rc;
-    char tfn[MAX_PATH];
+    char tfn[MAX_PATH*4];
 
-    rc = GetTempPath( MAX_PATH, tfn);
+    rc = GetTempPath( sizeof(tfn)-1, tfn);
 
     lua_pushnumber( L, rc);
     if( rc)
@@ -1271,7 +1272,7 @@ static void FreePIDL( LPITEMIDLIST idl) {
 
 static int global_SHGetSpecialFolderLocation(lua_State *L) {
     LPITEMIDLIST idl;
-    char out[MAX_PATH];
+    char out[MAX_PATH*4];
     int ifolder = ( int) luaL_checknumber( L, 1);
 
     if( SHGetSpecialFolderLocation( GetDesktopWindow(),
@@ -1291,11 +1292,11 @@ static int global_SHGetSpecialFolderLocation(lua_State *L) {
 static int global_GetFullPathName(lua_State *L) {
     DWORD le;
     DWORD rc;
-    char fpname[MAX_PATH];
+    char fpname[MAX_PATH*4];
     char *fpart;
     const char *pname = luaL_checkstring( L, 1);
 
-    rc = GetFullPathName( pname, sizeof( fpname), fpname, &fpart);
+    rc = GetFullPathName( pname, sizeof( fpname)-1, fpname, &fpart);
     if( !rc) {
         le = GetLastError();
         lua_pushnumber( L, 0);
