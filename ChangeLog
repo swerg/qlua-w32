@@ -1,0 +1,78 @@
+2013-11-02: Bug fix:
+                - Wrong parameter in Beep.
+
+2013-10-31: New functions:
+                - Beep
+                - MessageBeep
+                - CoInitialize
+                - CoUninitialize
+
+2013-10-28: QUIK ready. This library is linked to qlua.dll.
+            New functions:
+                - FindWindowEx
+                - SetFocus
+                - GetWindowText
+                - SetWindowText
+                - GetWindowPos
+                - mciSendString
+
+2007-04-15: Bug reported by Corey Tripp fixed.
+            Bug fix:
+                - Wrong parameter index in CreateMutex.
+
+2006-08-26: Denis Povshedny additions and bug fix:
+            Bug fix:
+                - SERVICE_ALL_ACCESS in OpenProcess
+            New functions:
+                - StartService
+                - QueryServiceConfig
+            New constants:
+                - SERVICE_CONTROL_STOP
+                - SERVICE_CONTROL_PAUSE
+                - SERVICE_CONTROL_CONTINUE
+                - SERVICE_CONTROL_INTERROGATE
+                - SERVICE_CONTROL_SHUTDOWN
+                - SERVICE_STOPPED
+                - SERVICE_START_PENDING
+                - SERVICE_STOP_PENDING
+                - SERVICE_RUNNING
+                - SERVICE_CONTINUE_PENDING
+                - SERVICE_PAUSE_PENDING
+                - SERVICE_PAUSED
+                - SERVICE_BOOT_START
+                - SERVICE_SYSTEM_START
+                - SERVICE_AUTO_START
+                - SERVICE_DEMAND_START
+                - SERVICE_DISABLED
+                    
+2006-08-21: Lua 5.1 ready.
+            New functions:
+                - IsUserAdmin (not a std Win32 api)
+                - OpenProcess
+                - IsRunning
+                - GetWindowThreadProcessId
+                - OpenSCManager
+                - OpenService
+                - CloseServiceHandle
+                - QueryServiceStatus
+                - ControlService
+                - DeleteService
+            
+2005-10-01: Dll renamed to lw32.dll.
+            The two first parameters of CreateProcess are optionals,
+            you must supply at least one to the system call to proceed.
+            New functions:
+                - ReplyMessage
+                - GetVersion
+                - FindFileFirst
+                - FindNextFile
+                - FindClose
+                - SHGetSpecialFolderLocation
+                - GetFullFileName
+            New constants:
+                - CSIDL_STARTUP
+                - CSIDL_STARTMENU
+                - CSIDL_COMMON_PROGRAMS
+                - CSIDL_COMMON_STARTUP
+                - CSIDL_COMMON_STARTMENU
+                - CSIDL_PROGRAM_FILES
