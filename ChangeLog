@@ -2,6 +2,8 @@
 
 2020-05-15: New functions:
                 - GetUserrName
+                - GetCurrentProcessId
+                - CloseWindow
 
 2019-07-17: Convert to VS2015 project
             Make two versions:

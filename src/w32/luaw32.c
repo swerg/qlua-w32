@@ -1546,6 +1546,17 @@ static int global_GetUserName(lua_State *L) {
     return(1);
 }
 
+static int global_GetCurrentProcessId(lua_State *L) {
+    lua_pushinteger( L, GetCurrentProcessId());
+    return( 1);
+}
+
+static int global_CloseWindow(lua_State *L) {
+    const HWND hWnd   = (HWND)(int)luaL_checkinteger( L, 1);
+    lua_pushboolean( L, CloseWindow(hWnd));
+    return( 1);
+}
+
 
 /* Module exported function */
 
@@ -1776,6 +1787,8 @@ static struct luaL_Reg ls_lib[] = {
     {"CoInitialize",global_CoInitialize},
     {"CoUninitialize",global_CoUninitialize},
     {"GetUserName",global_GetUserName},
+    {"GetCurrentProcessId",global_GetCurrentProcessId},
+    {"CloseWindow",global_CloseWindow},
     {NULL, NULL}
 };
 
