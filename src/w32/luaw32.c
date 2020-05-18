@@ -38,15 +38,22 @@
 * 2004-09-01 12:20:00  Danilo Tuler      GetTempPath added.
 * 2006-08-25 08:20:00  Denis Povshedny   QueryServiceConfig & StartService added.
 * 2007-04-15 10:31:00  Daniel Quintela   CreateMutex parameter list fixed.
-* 2013-10-27 00:00:15  www.quik2dde.ru   Linking with qlia.dll
-* 2019-07-16 00:00:15  www.quik2dde.ru   Fix file path buffer size
+* 2013-10-27 00:00:15  qlua.ru           Linking with qlua.dll
+* 2019-07-16 00:00:15  qlua.ru           File path buffer size fixed.
+* 2020-05-18 00:00:29  qlua.ru           Lua5.3 supporting added.
 *
 * NOTES
 *
 ***/
 
-#include <lauxlib.h>
-#include <lua.h>
+#ifdef LUA_51
+#include <Lua51/lauxlib.h>
+#include <Lua51/lua.h>
+#endif
+#ifdef LUA_53
+#include <Lua53/lauxlib.h>
+#include <Lua53/lua.h>
+#endif
 
 //#include <compat-5.1.h>
 
@@ -1526,6 +1533,19 @@ static int global_CoUninitialize(lua_State *L) {
     return(0);
 }
 
+static int global_GetUserName(lua_State *L) {
+	char buf[2048];
+	DWORD bufLen = sizeof(buf);
+	if (GetUserName(buf, &bufLen)) {
+		lua_pushstring( L, buf );
+	}
+	else {
+		lua_pushstring( L, "" );
+	}
+
+    return(1);
+}
+
 
 /* Module exported function */
 
@@ -1673,15 +1693,20 @@ static struct {
         {"MB_OK", MB_OK},
 
 		{"BM_CLICK", BM_CLICK},
-        {NULL,0}
+
+		{"WM_COMMAND", WM_COMMAND},
+		{"WM_SYSCOMMAND", WM_SYSCOMMAND},
+		{"WM_CLOSE", WM_CLOSE},
+
+		{NULL,0}
     };
 
-static struct luaL_reg ls_lib[] = {
+static struct luaL_Reg ls_lib[] = {
     {"ShellOpen", global_ShellOpen},
     {"FindWindow", global_FindWindow},
     {"FindWindowEx", global_FindWindowEx},
-	{"SetFocus", global_SetFocus},
-	{"GetWindowText", global_GetWindowText},
+    {"SetFocus", global_SetFocus},
+    {"GetWindowText", global_GetWindowText},
     {"SetWindowText", global_SetWindowText},
     {"GetWindowRect", global_GetWindowRect},
     {"RegisterHotKey", global_RegisterHotKey},
@@ -1748,8 +1773,9 @@ static struct luaL_reg ls_lib[] = {
     {"mciSendString",global_mciSendString},
     {"MessageBeep",global_MessageBeep},
     {"Beep",global_Beep},
-	{"CoInitialize",global_CoInitialize},
+    {"CoInitialize",global_CoInitialize},
     {"CoUninitialize",global_CoUninitialize},
+    {"GetUserName",global_GetUserName},
     {NULL, NULL}
 };
 
