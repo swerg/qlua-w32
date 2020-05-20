@@ -1,6 +1,19 @@
 #
 LICENSE
 *.zip
+*.7z
+.bin
+.tmp
+
+build/VC2015/.build/*
+
+#VS temp files
+*.suo
+*.idb
+*.pdb
+*.exp
+*.VC.db
+*.vcxproj.user
 
 # Prerequisites
 *.d

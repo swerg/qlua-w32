@@ -46,14 +46,8 @@
 *
 ***/
 
-#ifdef LUA_51
-#include <Lua51/lauxlib.h>
-#include <Lua51/lua.h>
-#endif
-#ifdef LUA_53
-#include <Lua53/lauxlib.h>
-#include <Lua53/lua.h>
-#endif
+#include <lauxlib.h>
+#include <lua.h>
 
 //#include <compat-5.1.h>
 
