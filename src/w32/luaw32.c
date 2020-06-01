@@ -4,7 +4,7 @@
 * COPYRIGHT
 *  (C) 2004-2007 Daniel Quintela.  All rights reserved.
 *  http://www.soongsoft.com mailto:dq@soongsoft.com
-*  (C) 2013-2019 https://quik2dde.ru/viewtopic.php?id=78
+*  (C) 2013-2020 https://quik2dde.ru/viewtopic.php?id=78
 * LICENSE
 *  Permission is hereby granted, free of charge, to any person obtaining
 *  a copy of this software and associated documentation files (the
@@ -1374,8 +1374,8 @@ static int global_GetWindowThreadProcessId( lua_State *L ) {
     DWORD tid, pid;
 
     tid = GetWindowThreadProcessId( ( HWND ) h, &pid );
-    lua_pushnumber( L, ( long ) tid );
-    lua_pushnumber( L, ( long ) pid );
+    lua_pushinteger( L, ( lua_Integer ) tid );
+    lua_pushinteger( L, ( lua_Integer ) pid );
 
     return 2;
 }
@@ -1546,7 +1546,7 @@ static int global_GetCurrentProcessId(lua_State *L) {
 }
 
 static int global_CloseWindow(lua_State *L) {
-    const HWND hWnd   = (HWND)(int)luaL_checkinteger( L, 1);
+    const HWND hWnd   = (HWND)(lua_Integer)luaL_checkinteger( L, 1);
     lua_pushboolean( L, CloseWindow(hWnd));
     return( 1);
 }
