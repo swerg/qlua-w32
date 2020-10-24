@@ -1703,7 +1703,7 @@ static struct {
 		{"WM_SYSCOMMAND", WM_SYSCOMMAND},
 		{"WM_CLOSE", WM_CLOSE},
 
-		{NULL,0}
+		{nullptr,0}
     };
 
 static struct luaL_Reg ls_lib[] = {
@@ -1783,7 +1783,7 @@ static struct luaL_Reg ls_lib[] = {
     {"GetUserName",global_GetUserName},
     {"GetCurrentProcessId",global_GetCurrentProcessId},
     {"CloseWindow",global_CloseWindow},
-    {NULL, NULL}
+    {nullptr, nullptr}
 };
 
 LUAW32_API int luaopen_w32( lua_State *L) {
