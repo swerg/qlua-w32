@@ -4,6 +4,7 @@ LICENSE
 *.7z
 .bin
 .tmp
+*.opendb
 
 build/VC2015/.build/*
 

@@ -98,28 +98,36 @@ static int global_ShellOpen(lua_State *L) {
 
 static int global_FindWindow(lua_State *L) {
     long lrc;
+	const int narg = lua_gettop(L);
     const char *cname = luaL_checkstring( L, 1);
-    const char *wname = luaL_checkstring( L, 2);
+	const char *wname = NULL;
+	if(narg > 1)
+		wname = luaL_checkstring(L, 2);
 
     lrc = ( long) FindWindow( cname[0] ? cname : NULL,
-                                wname[0] ? wname : NULL);
+	                          wname && wname[0] ? wname : NULL);
 
-    lua_pushnumber( L, lrc);
+    lua_pushinteger( L, lrc);
 
     return( 1);
 }
 
 static int global_FindWindowEx(lua_State *L) {
-    const HWND parent   = (HWND)(int)luaL_checknumber( L, 1);
-    const HWND childaft = (HWND)(int)luaL_checknumber( L, 2);
-    const char *cname = luaL_checkstring( L, 3);
-    const char *wname = luaL_checkstring( L, 4);
+	const int narg = lua_gettop(L);
+	const HWND parent   = (HWND)(int)luaL_checkinteger( L, 1);
+    const HWND childaft = (HWND)(int)luaL_checkinteger( L, 2);
+	const char *cname = NULL;
+	if (narg > 2)
+		cname = luaL_checkstring(L, 3);
+	const char *wname = NULL;
+	if (narg > 3)
+		wname = luaL_checkstring(L, 4);
 
     long lrc = ( long) FindWindowEx( parent, childaft,
-                                cname[0] ? cname : NULL,
-                                wname[0] ? wname : NULL);
+                                cname && cname[0] ? cname : NULL,
+                                wname && wname[0] ? wname : NULL);
 
-    lua_pushnumber( L, lrc);
+	lua_pushinteger( L, lrc);
 
     return( 1);
 }
@@ -229,37 +237,51 @@ static int global_RegisterHotKey(lua_State *L) {
 }
 
 static int global_SetForegroundWindow(lua_State *L) {
-    long hwnd = MYP2HCAST luaL_checknumber( L, 1);
+    long hwnd = MYP2HCAST luaL_checkinteger( L, 1);
 
-    lua_pushnumber( L, SetForegroundWindow( ( HWND) hwnd));
+	lua_pushinteger( L, SetForegroundWindow( ( HWND) hwnd));
 
     return( 1);
 }
 
 static int global_PostMessage(lua_State *L) {
-    BOOL rc;
-    long hwnd = MYP2HCAST luaL_checknumber( L, 1);
-    UINT msg = ( UINT) luaL_checknumber( L, 2);
-    WPARAM wparam = ( WPARAM) luaL_checknumber( L, 3);
-    LPARAM lparam = ( LPARAM) luaL_checknumber( L, 4);
+	BOOL rc;
+	long hwnd = MYP2HCAST luaL_checkinteger(L, 1);
+	UINT msg = (UINT)luaL_checkinteger(L, 2);
+	WPARAM wparam = (WPARAM)luaL_checkinteger(L, 3);
+	LPARAM lparam = (LPARAM)luaL_checkinteger(L, 4);
 
     rc = PostMessage( ( HWND) hwnd, msg, wparam, lparam);
 
-    lua_pushnumber( L, rc);
+	lua_pushinteger(L, rc);
 
     return( 1);
 }
 
+static int global_SendMessage(lua_State *L) {
+	BOOL rc;
+	long hwnd = MYP2HCAST luaL_checkinteger(L, 1);
+	UINT msg = (UINT)luaL_checkinteger(L, 2);
+	WPARAM wparam = (WPARAM)luaL_checkinteger(L, 3);
+	LPARAM lparam = (LPARAM)luaL_checkinteger(L, 4);
+
+	rc = SendMessage((HWND)hwnd, msg, wparam, lparam);
+
+	lua_pushinteger(L, rc);
+
+	return(1);
+}
+
 static int global_PostThreadMessage(lua_State *L) {
     BOOL rc;
-    DWORD tid = ( DWORD) luaL_checknumber( L, 1);
-    UINT msg = ( UINT) luaL_checknumber( L, 2);
-    WPARAM wparam = ( WPARAM) luaL_checknumber( L, 3);
-    LPARAM lparam = ( LPARAM) luaL_checknumber( L, 4);
+    DWORD tid = ( DWORD)luaL_checkinteger(L, 1);
+    UINT msg = ( UINT)luaL_checkinteger(L, 2);
+    WPARAM wparam = ( WPARAM)luaL_checkinteger(L, 3);
+    LPARAM lparam = ( LPARAM)luaL_checkinteger(L, 4);
 
     rc = PostThreadMessage( tid, msg, wparam, lparam);
 
-    lua_pushnumber( L, rc);
+	lua_pushinteger( L, rc);
 
     return( 1);
 }
@@ -1703,7 +1725,7 @@ static struct {
 		{"WM_SYSCOMMAND", WM_SYSCOMMAND},
 		{"WM_CLOSE", WM_CLOSE},
 
-		{nullptr,0}
+		{NULL,0}
     };
 
 static struct luaL_Reg ls_lib[] = {
@@ -1717,6 +1739,7 @@ static struct luaL_Reg ls_lib[] = {
     {"RegisterHotKey", global_RegisterHotKey},
     {"SetForegroundWindow", global_SetForegroundWindow},
     {"PostMessage", global_PostMessage},
+	{"SendMessage", global_SendMessage},
     {"PostThreadMessage", global_PostThreadMessage},
     {"GetMessage", global_GetMessage},
     {"PeekMessage", global_PeekMessage},
@@ -1783,7 +1806,7 @@ static struct luaL_Reg ls_lib[] = {
     {"GetUserName",global_GetUserName},
     {"GetCurrentProcessId",global_GetCurrentProcessId},
     {"CloseWindow",global_CloseWindow},
-    {nullptr, nullptr}
+    {NULL, NULL}
 };
 
 LUAW32_API int luaopen_w32( lua_State *L) {
