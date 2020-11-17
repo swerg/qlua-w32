@@ -52,9 +52,12 @@ if hTabWnd > 0 then
 	local idxGr = w32.TabCtrl_GetItemIndexByText(hTabWnd, "Графики")
 	if idxGr >= 0 then
 		-- Если вкладка "Графики" найдена
-		-- переключимся на неё и создадим таблицу на ней
+		-- переключимся на неё и создадим таблицу на ней, получив имя
 		w32.TabCtrl_SetCurFocus(hTabWnd, idxGr)
-		CreateTableWindow("Вкладка 'Графики'")
+		-- Получим название текущей активной вкладки (только что на нее переключились)
+		local txt = w32.TabCtrl_GetItemText(hTabWnd)
+		-- Используем tostring(), т.к. TabCtrl_GetItemText при ошибке возвращает nil
+		CreateTableWindow("Вкладка '" .. tostring(txt) .. "'")
 	end
 
 	-- Получим общее количество вкладок
@@ -64,9 +67,10 @@ if hTabWnd > 0 then
 		w32.TabCtrl_SetCurFocus(hTabWnd, i)
 		-- Получим название вкладки
 		-- т.к. получаем название текущей активной вкладки (только что на нее переключились),
-		-- то второй параметр можно не указывать
+		-- то второй параметр можно не указывать; но здесь оставлен второй параметр для тестов
 		local txt = w32.TabCtrl_GetItemText(hTabWnd, i)
-		CreateTableWindow(txt)
+		-- Используем tostring(), т.к. TabCtrl_GetItemText при ошибке возвращает nil
+		CreateTableWindow(tostring(txt))
 	end
 
 	-- Переключимся назад на исходную вкладку
