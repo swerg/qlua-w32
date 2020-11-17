@@ -1392,7 +1392,7 @@ static int global_IsRunning( lua_State *L ) {
 }
 
 static int global_GetWindowThreadProcessId( lua_State *L ) {
-    long h = MYP2HCAST luaL_checknumber( L, 1 );
+    long h = MYP2HCAST luaL_checkinteger( L, 1 );
     DWORD tid, pid;
 
     tid = GetWindowThreadProcessId( ( HWND ) h, &pid );
@@ -1571,6 +1571,91 @@ static int global_CloseWindow(lua_State *L) {
     const HWND hWnd   = (HWND)(lua_Integer)luaL_checkinteger( L, 1);
     lua_pushboolean( L, CloseWindow(hWnd));
     return( 1);
+}
+
+static int global_IsWindowVisible(lua_State *L) {
+	const HWND hWnd = (HWND)(lua_Integer)luaL_checkinteger(L, 1);
+	lua_pushboolean(L, IsWindowVisible(hWnd));
+	return(1);
+}
+
+static int global_TabCtrl_GetItemCount(lua_State *L) {
+	const HWND hWnd = (HWND)(lua_Integer)luaL_checkinteger(L, 1);
+	lua_pushinteger(L, TabCtrl_GetItemCount(hWnd));
+	return(1);
+}
+
+static int global_TabCtrl_SetCurFocus(lua_State *L) {
+	const HWND hWnd = (HWND)(lua_Integer)luaL_checkinteger(L, 1);
+	const int i = luaL_checkinteger(L, 2);
+	TabCtrl_SetCurFocus(hWnd, i);
+	return(0);
+}
+
+static int global_TabCtrl_SetCurSel(lua_State *L) {
+	const HWND hWnd = (HWND)(lua_Integer)luaL_checkinteger(L, 1);
+	const int i = luaL_checkinteger(L, 2);
+	lua_pushinteger(L, TabCtrl_SetCurSel(hWnd, i));
+	return(1);
+}
+
+static int global_TabCtrl_GetItemText(lua_State *L) {
+	const int narg = lua_gettop(L);
+	const HWND hWnd = (HWND)(lua_Integer)luaL_checkinteger(L, 1);
+	const int i = narg > 1 ? luaL_checkinteger(L, 2) : TabCtrl_GetCurFocus(hWnd);
+
+	char buf[256];
+	buf[0] = '\0';
+	TCITEM citem;
+	memset(&citem, 0, sizeof(citem));
+	citem.mask = TCIF_TEXT;
+	citem.pszText = buf;
+	citem.cchTextMax = sizeof(buf);
+	if (TabCtrl_GetItem(hWnd, i, &citem))
+		lua_pushstring(L, buf);
+	else
+		lua_pushnil(L);
+
+	return(1);
+}
+
+static int global_TabCtrl_GetItemIndexByText(lua_State *L) {
+	const HWND hWnd = (HWND)(lua_Integer)luaL_checkinteger(L, 1);
+	const char *szText = luaL_checkstring(L, 2);
+
+	const int cnt = TabCtrl_GetItemCount(hWnd);
+	int numItem = -1;
+
+	for (int i = 0; i < cnt; ++i) {
+		char buf[256];
+		buf[0] = '\0';
+		TCITEM citem;
+		memset(&citem, 0, sizeof(citem));
+		citem.mask = TCIF_TEXT;
+		citem.pszText = buf;
+		citem.cchTextMax = sizeof(buf);
+		if (TabCtrl_GetItem(hWnd, i, &citem))
+			if (strncmp(buf, szText, sizeof(buf)) == 0) {
+				numItem = i;
+				break;
+			}
+	}
+
+	lua_pushinteger(L, numItem);
+
+	return(1);
+}
+
+static int global_TabCtrl_GetCurSel(lua_State *L) {
+	const HWND hWnd = (HWND)(lua_Integer)luaL_checkinteger(L, 1);
+	lua_pushinteger(L, TabCtrl_GetCurSel(hWnd));
+	return(1);
+}
+
+static int global_TabCtrl_GetCurFocus(lua_State *L) {
+	const HWND hWnd = (HWND)(lua_Integer)luaL_checkinteger(L, 1);
+	lua_pushinteger(L, TabCtrl_GetCurFocus(hWnd));
+	return(1);
 }
 
 
@@ -1806,6 +1891,14 @@ static struct luaL_Reg ls_lib[] = {
     {"GetUserName",global_GetUserName},
     {"GetCurrentProcessId",global_GetCurrentProcessId},
     {"CloseWindow",global_CloseWindow},
+	{"IsWindowVisible",global_IsWindowVisible},
+	{"TabCtrl_GetItemCount",global_TabCtrl_GetItemCount},
+	{"TabCtrl_SetCurFocus",global_TabCtrl_SetCurFocus},
+	{"TabCtrl_SetCurSel",global_TabCtrl_SetCurSel},
+	{"TabCtrl_GetItemText",global_TabCtrl_GetItemText},
+	{"TabCtrl_GetItemIndexByText",global_TabCtrl_GetItemIndexByText},
+	{"TabCtrl_GetCurSel",global_TabCtrl_GetCurSel},
+	{"TabCtrl_GetCurFocus",global_TabCtrl_GetCurFocus},
     {NULL, NULL}
 };
 
