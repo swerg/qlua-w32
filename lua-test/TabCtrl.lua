@@ -18,7 +18,7 @@ function GetQuikMainWindowHandle()
 	return hQuikWnd
 end
 
--- Простая тестовая функция создания окна с таблицей
+-- Тестовая функция создания пользовательского окна с таблицей
 function CreateTableWindow(caption)
 	local t_id = AllocTable()   
 	AddColumn(t_id, 0, "1", true, QTABLE_INT_TYPE, 15)
@@ -33,8 +33,8 @@ end
 
 hQuikWnd = GetQuikMainWindowHandle()
 
-hTabWnd = 0  -- здесь будет handle окна вкладок
-
+-- получим handle окна вкладок, далее все операции по переключению вкладок будем совершать с этим окном
+hTabWnd = 0
 if hQuikWnd > 0 then
 	hTabWnd = w32.FindWindowEx(hQuikWnd, 0, "SysTabControl32", "")
 	if hTabWnd ~= 0 and not w32.IsWindowVisible(hTabWnd) then
@@ -48,7 +48,17 @@ if hTabWnd > 0 then
 	-- Сохраним индекс текущей активной вкладки
 	local prevIdx = w32.TabCtrl_GetCurFocus(hTabWnd)
 
-	-- Получим индекс вкладки с именем "Графики"
+	-- Определим и выведем через message() наименование активной вкладки на момент старта
+	-- (индекс активной вкладки сохранён ранее, так что здесь получаем / отображаем имя просто так)
+	-- w32.TabCtrl_GetItemText() вызываем только с 1 параметром, т.к. нас интересует имя активной вкладки
+	local activeTabName = w32.TabCtrl_GetItemText(hTabWnd)
+	if activeTabName then
+		-- т.к. явно проверили, что имя вкладки получить удалось (оно не nil)
+		-- просто отображаем его без tostring()
+		message("Активна вкладка: " .. activeTabName)
+	end
+
+	-- Получим индекс вкладки с именем "Графики" (если такая существует)
 	local idxGr = w32.TabCtrl_GetItemIndexByText(hTabWnd, "Графики")
 	if idxGr >= 0 then
 		-- Если вкладка "Графики" найдена
