@@ -1,3 +1,10 @@
+2020-12-05: New constants:
+                - CB_GETCURSEL
+                - CB_SETCURSEL
+                - CB_GETCOUNT
+
+2020-11-18: Functions TabCtrl_* are added.
+
 2020-05-18: Supporting Lua5.3 is added.
 
 2020-05-15: New functions:
