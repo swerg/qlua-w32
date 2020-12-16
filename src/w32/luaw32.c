@@ -41,6 +41,7 @@
 * 2013-10-27 00:00:15  qlua.ru           Linking with qlua.dll
 * 2019-07-16 00:00:15  qlua.ru           File path buffer size fixed.
 * 2020-05-18 00:00:29  qlua.ru           Lua5.3 supporting added.
+* 2020-12-16 19:00:00  qlua.ru           Lua5.4 supporting added.
 *
 * NOTES
 *
@@ -48,8 +49,6 @@
 
 #include <lauxlib.h>
 #include <lua.h>
-
-//#include <compat-5.1.h>
 
 #ifndef WIN32
 #error "Only for Windows!"
@@ -237,39 +236,37 @@ static int global_RegisterHotKey(lua_State *L) {
 }
 
 static int global_SetForegroundWindow(lua_State *L) {
-    long hwnd = MYP2HCAST luaL_checkinteger( L, 1);
+	auto hwnd = luaL_checkinteger(L, 1);
+	BOOL rc = SetForegroundWindow((HWND)hwnd);
+	lua_pushinteger(L, rc == TRUE);
 
-	lua_pushinteger( L, SetForegroundWindow( ( HWND) hwnd));
-
-    return( 1);
+	return 1;
 }
 
 static int global_PostMessage(lua_State *L) {
-	BOOL rc;
-	long hwnd = MYP2HCAST luaL_checkinteger(L, 1);
+	auto hwnd = luaL_checkinteger(L, 1);
 	UINT msg = (UINT)luaL_checkinteger(L, 2);
 	WPARAM wparam = (WPARAM)luaL_checkinteger(L, 3);
 	LPARAM lparam = (LPARAM)luaL_checkinteger(L, 4);
 
-    rc = PostMessage( ( HWND) hwnd, msg, wparam, lparam);
+    BOOL rc = PostMessage( ( HWND) hwnd, msg, wparam, lparam);
 
-	lua_pushinteger(L, rc);
+	lua_pushboolean(L, rc == TRUE);
 
-    return( 1);
+    return 1;
 }
 
 static int global_SendMessage(lua_State *L) {
-	BOOL rc;
-	long hwnd = MYP2HCAST luaL_checkinteger(L, 1);
+	auto hwnd = luaL_checkinteger(L, 1);
 	UINT msg = (UINT)luaL_checkinteger(L, 2);
 	WPARAM wparam = (WPARAM)luaL_checkinteger(L, 3);
 	LPARAM lparam = (LPARAM)luaL_checkinteger(L, 4);
 
-	rc = SendMessage((HWND)hwnd, msg, wparam, lparam);
+	BOOL rc = SendMessage((HWND)hwnd, msg, wparam, lparam);
 
-	lua_pushinteger(L, rc);
+	lua_pushboolean(L, rc == TRUE);
 
-	return(1);
+	return 1;
 }
 
 static int global_PostThreadMessage(lua_State *L) {
@@ -1907,13 +1904,18 @@ static struct luaL_Reg ls_lib[] = {
 };
 
 LUAW32_API int luaopen_w32( lua_State *L) {
-    int i;
-    luaL_openlib( L, LS_NAMESPACE, ls_lib, 0);
-    for( i = 0; consts[i].name != NULL; i++) {
+#if LUA_VERSION_NUM >= 502
+	luaL_checkversion(L);
+	luaL_newlib(L, ls_lib);
+#else
+	luaL_openlib( L, LS_NAMESPACE, ls_lib, 0);
+#endif
+	int i;
+	for( i = 0; consts[i].name != NULL; i++) {
         lua_pushstring( L, consts[i].name);
         lua_pushnumber( L, consts[i].value);
         lua_settable( L, -3);
     }
-    lua_pop( L, 1);
-    return 0;
+
+	return 1;
 }
