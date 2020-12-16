@@ -1,7 +1,6 @@
-require("w32")
+w32z = require("w32")
 
-
-message("GetUserName=[" .. w32.GetUserName() .. "]")
-message("WM_COMMAND=" .. w32.WM_COMMAND)
-message("WM_SYSCOMMAND=" .. w32.WM_SYSCOMMAND)
-message("WM_CLOSE=" .. w32.WM_CLOSE)
+message("GetUserName=[" .. w32z.GetUserName() .. "]")
+message("WM_COMMAND=" .. w32z.WM_COMMAND)
+message("WM_SYSCOMMAND=" .. w32z.WM_SYSCOMMAND)
+message("WM_CLOSE=" .. w32z.WM_CLOSE)
