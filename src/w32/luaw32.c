@@ -62,7 +62,7 @@
 #include <shlwapi.h>
 #include <shlobj.h>
 
-#if LUA_VERSION_NUM >= 502
+#if LUA_VERSION_NUM <= 502
 #define LS_NAMESPACE    "w32"
 #endif
 
@@ -80,6 +80,14 @@
 #endif
 
 #define LUAW32_API __declspec(dllexport)
+
+#if LUA_VERSION_NUM >= 503
+#define	lua_checkint64(L, n)    luaL_checkinteger(L, n)
+#define	lua_pushint64(L, n)     lua_pushinteger(L, n)
+#else
+#define	lua_checkint64(L, n)    luaL_checknumber(L, n)
+#define	lua_pushint64(L, n)     lua_pushnumber(L, n)
+#endif
 
 /* Registered functions */
 
@@ -246,12 +254,12 @@ static int global_SetForegroundWindow(lua_State *L) {
 }
 
 static int global_PostMessage(lua_State *L) {
-	auto hwnd = luaL_checkinteger(L, 1);
-	UINT msg = (UINT)luaL_checkinteger(L, 2);
-	WPARAM wparam = (WPARAM)luaL_checkinteger(L, 3);
-	LPARAM lparam = (LPARAM)luaL_checkinteger(L, 4);
+	auto hwnd = lua_checkint64(L, 1);
+	UINT msg = (UINT)lua_checkint64(L, 2);
+	WPARAM wparam = (WPARAM)lua_checkint64(L, 3);
+	LPARAM lparam = (LPARAM)lua_checkint64(L, 4);
 
-    BOOL rc = PostMessage( ( HWND) hwnd, msg, wparam, lparam);
+    BOOL rc = PostMessage((HWND)hwnd, msg, wparam, lparam);
 
 	lua_pushboolean(L, rc == TRUE);
 
@@ -259,14 +267,14 @@ static int global_PostMessage(lua_State *L) {
 }
 
 static int global_SendMessage(lua_State *L) {
-	HWND hwnd = (HWND)luaL_checkinteger(L, 1);
-	UINT msg = (UINT)luaL_checkinteger(L, 2);
-	WPARAM wparam = (WPARAM)luaL_checkinteger(L, 3);
-	LPARAM lparam = (LPARAM)luaL_checkinteger(L, 4);
+	auto hwnd = lua_checkint64(L, 1);
+	UINT msg = (UINT)lua_checkint64(L, 2);
+	WPARAM wparam = (WPARAM)lua_checkint64(L, 3);
+	LPARAM lparam = (LPARAM)lua_checkint64(L, 4);
 
-	LRESULT rc = SendMessage(hwnd, msg, wparam, lparam);
+	LRESULT rc = SendMessage((HWND)hwnd, msg, wparam, lparam);
 
-	lua_pushinteger(L, rc);
+	lua_pushint64(L, rc);
 
 	return 1;
 }

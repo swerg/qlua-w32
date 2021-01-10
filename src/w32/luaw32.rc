@@ -11,8 +11,8 @@ LANGUAGE 0x0a, 0x0b
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,6,3,0
- PRODUCTVERSION 1,6,3,0
+ FILEVERSION 1,6,5,0
+ PRODUCTVERSION 1,6,5,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -30,13 +30,13 @@ BEGIN
             VALUE "Comments", "\0"
             VALUE "CompanyName", "\0"
             VALUE "FileDescription", "w32 is a Lua extension library\0"
-            VALUE "FileVersion", "1, 6, 3, 0\0"
+            VALUE "FileVersion", "1, 6, 5, 0\0"
             VALUE "InternalName", "w32\0"
-            VALUE "LegalCopyright", "Copyright © 2004-2007 Daniel Quintela, © 2013-2020 qlua.ru\0"
+            VALUE "LegalCopyright", "Copyright © 2004-2007 Daniel Quintela, © 2013-2021 qlua.ru\0"
             VALUE "OriginalFilename", "w32.dll\0"
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "W32 support\0"
-            VALUE "ProductVersion", "1, 6, 3, 0\0"
+            VALUE "ProductVersion", "1, 6, 5, 0\0"
         END
     END
     BLOCK "VarFileInfo"
