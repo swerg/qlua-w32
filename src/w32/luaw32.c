@@ -62,7 +62,9 @@
 #include <shlwapi.h>
 #include <shlobj.h>
 
+#if LUA_VERSION_NUM >= 502
 #define LS_NAMESPACE    "w32"
+#endif
 
 #include <time.h>
 
@@ -257,14 +259,14 @@ static int global_PostMessage(lua_State *L) {
 }
 
 static int global_SendMessage(lua_State *L) {
-	auto hwnd = luaL_checkinteger(L, 1);
+	HWND hwnd = (HWND)luaL_checkinteger(L, 1);
 	UINT msg = (UINT)luaL_checkinteger(L, 2);
 	WPARAM wparam = (WPARAM)luaL_checkinteger(L, 3);
 	LPARAM lparam = (LPARAM)luaL_checkinteger(L, 4);
 
-	BOOL rc = SendMessage((HWND)hwnd, msg, wparam, lparam);
+	LRESULT rc = SendMessage(hwnd, msg, wparam, lparam);
 
-	lua_pushboolean(L, rc == TRUE);
+	lua_pushinteger(L, rc);
 
 	return 1;
 }
@@ -1905,7 +1907,6 @@ static struct luaL_Reg ls_lib[] = {
 
 LUAW32_API int luaopen_w32( lua_State *L) {
 #if LUA_VERSION_NUM >= 502
-	luaL_checkversion(L);
 	luaL_newlib(L, ls_lib);
 #else
 	luaL_openlib( L, LS_NAMESPACE, ls_lib, 0);
