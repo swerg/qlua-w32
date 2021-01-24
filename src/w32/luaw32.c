@@ -1535,7 +1535,7 @@ static int global_MessageBeep(lua_State *L) {
 }
 
 static int global_Beep(lua_State *L) {
-	const DWORD dwFreq     = luaL_checkinteger( L, 1);
+	const DWORD dwFreq     = luaL_checknumber( L, 1);  // frequency can be double or integer
 	const DWORD dwDuration = luaL_checkinteger( L, 2);
 
     BOOL rc = Beep( dwFreq, dwDuration);
