@@ -9,14 +9,14 @@ copy build\VC2015\.build\x64\Release53\*.dll .bin\x64-Lua53
 copy build\VC2015\.build\x64\Release54\*.dll .bin\x64-Lua54
 
 copy nul .bin\ReadMe.txt
-echo Áèáëèîòåêà ðàñøèðåíèÿ w32 äëÿ Lua. >> .bin\ReadMe.txt
-echo Ïîçâîëÿåò âûçûâàòü íåêîòîðûå WinAPI ôóíêöèé èç Lua. >> .bin\ReadMe.txt
-echo Ïîäðîáíîå îïèñàíèå: https://quik2dde.ru/viewtopic.php?id=78 >> .bin\ReadMe.txt
+echo Ð‘Ð¸Ð±Ð»Ð¸Ð¾Ñ‚ÐµÐºÐ° Ñ€Ð°ÑÑˆÐ¸Ñ€ÐµÐ½Ð¸Ñ w32 Ð´Ð»Ñ Lua. >> .bin\ReadMe.txt
+echo ÐŸÐ¾Ð·Ð²Ð¾Ð»ÑÐµÑ‚ Ð²Ñ‹Ð·Ñ‹Ð²Ð°Ñ‚ÑŒ Ð½ÐµÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ðµ WinAPI Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¹ Ð¸Ð· Lua. >> .bin\ReadMe.txt
+echo ÐŸÐ¾Ð´Ñ€Ð¾Ð±Ð½Ð¾Ðµ Ð¾Ð¿Ð¸ÑÐ°Ð½Ð¸Ðµ: https://quik2dde.ru/viewtopic.php?id=78 >> .bin\ReadMe.txt
 echo. >> .bin\ReadMe.txt
-echo \x32       -- äëÿ QUIK 6.x, 7.x >> .bin\ReadMe.txt
-echo \x64-Lua51 -- äëÿ QUIK 8.0-8.4 >> .bin\ReadMe.txt
-echo \x64-Lua53 -- äëÿ QUIK 8.5 è äàëåå ïðè âûáîðå Lua5.3 äëÿ âûïîëíåíèè ñêðèïòà >> .bin\ReadMe.txt
-echo \x64-Lua54 -- äëÿ QUIK 8.11 è äàëåå ïðè âûáîðå Lua5.4 äëÿ âûïîëíåíèè ñêðèïòà >> .bin\ReadMe.txt
+echo \x32       -- Ð´Ð»Ñ QUIK 6.x, 7.x >> .bin\ReadMe.txt
+echo \x64-Lua51 -- Ð´Ð»Ñ QUIK 8.0-8.4 >> .bin\ReadMe.txt
+echo \x64-Lua53 -- Ð´Ð»Ñ QUIK 8.5 Ð¸ Ð´Ð°Ð»ÐµÐµ Ð¿Ñ€Ð¸ Ð²Ñ‹Ð±Ð¾Ñ€Ðµ Lua5.3 Ð´Ð»Ñ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ ÑÐºÑ€Ð¸Ð¿Ñ‚Ð° >> .bin\ReadMe.txt
+echo \x64-Lua54 -- Ð´Ð»Ñ QUIK 8.11 Ð¸ Ð´Ð°Ð»ÐµÐµ Ð¿Ñ€Ð¸ Ð²Ñ‹Ð±Ð¾Ñ€Ðµ Lua5.4 Ð´Ð»Ñ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ ÑÐºÑ€Ð¸Ð¿Ñ‚Ð° >> .bin\ReadMe.txt
 
 del /Q w32.dll.zip 
 

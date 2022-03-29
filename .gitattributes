@@ -1,0 +1,5 @@
+*.cpp	working-tree-encoding=CP1251	eol=CRLF
+*.c	working-tree-encoding=CP1251	eol=CRLF
+*.h	working-tree-encoding=CP1251	eol=CRLF
+*.rc	working-tree-encoding=CP1251	eol=CRLF
+*.cmd	working-tree-encoding=CP1251	eol=CRLF
